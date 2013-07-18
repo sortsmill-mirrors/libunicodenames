@@ -25,15 +25,14 @@ SUBDIRS = lib . po tests
 NAMESLIST_EN = "http://www.unicode.org/Public/UNIDATA/NamesList.txt"
 NAMESLIST_FR = "http://hapax.qc.ca/ListeDesNoms-5.0.0.txt"
 
-#--------------------------------------------------------------------------
-
 pkgconfigdir = ${libdir}/pkgconfig
-nodist_pkgconfig_DATA = libunicodenames.pc
+nodist_pkgconfig_DATA =
 
-lib_LTLIBRARIES = libunicodenames.la
-include_HEADERS = libunicodenames.h
-dist_pkgdata_DATA = en.names-db fr.names-db en.blocks-db fr.blocks-db
-info_TEXINFOS = libunicodenames.texi
+dist_pkgdata_DATA =
+nodist_pkgdata_DATA =
+
+lib_LTLIBRARIES =
+include_HEADERS =
 
 AM_CPPFLAGS = 											\
 	-I$(top_builddir)/lib -I$(top_srcdir)/lib			\
@@ -43,6 +42,19 @@ AM_CPPFLAGS = 											\
 
 AM_CFLAGS = $(WARNING_CFLAGS) $(CFLAG_VISIBILITY)
 AM_LDFLAGS = $(LTLIBINTL)
+
+#--------------------------------------------------------------------------
+
+nodist_pkgconfig_DATA += libunicodenames.pc
+
+if NAMESLIST_INSTALL
+nodist_pkgdata_DATA += NamesList.UTF-8 ListeDesNoms.UTF-8
+endif NAMESLIST_INSTALL
+
+lib_LTLIBRARIES += libunicodenames.la
+include_HEADERS += libunicodenames.h
+dist_pkgdata_DATA += en.names-db fr.names-db en.blocks-db fr.blocks-db
+info_TEXINFOS = libunicodenames.texi
 
 libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 	common_code.c noinst_header.h libgettext.h
@@ -137,10 +149,10 @@ make-changelog:
 		echo; \
 	fi
 
+#--------------------------------------------------------------------------
+
 DISTCLEANFILES = NamesList.txt ListeDesNoms.txt
 DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
-
-#--------------------------------------------------------------------------
 
 distclean-local:
 	if test '$(top_srcdir)' -ef '$(top_builddir)'; then		\

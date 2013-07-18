@@ -53,6 +53,13 @@ AC_SUBST([VERSION_PATCH])
 AC_SUBST([VERSION_EXTRA])
 AC_SUBST([VERSION_EXTRA_SHORT])
 
+AC_ARG_ENABLE([nameslist-install],
+        [AS_HELP_STRING([--enable-nameslist-install],
+                [install NamesList.UTF-8 and ListeDesNoms.UTF-8
+                 for use in the testsuites of libunicodenames wrappers,
+                 such as libunicodenames++])])
+AM_CONDITIONAL([NAMESLIST_INSTALL],[test x"${enable_nameslist_install}" = xyes])
+
 #--------------------------------------------------------------------------
 #
 # Checks for programs.
