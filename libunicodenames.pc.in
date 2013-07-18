@@ -4,6 +4,7 @@ bindir=@bindir@
 libdir=@libdir@
 includedir=@includedir@
 datarootdir=@datarootdir@
+pkgdatadir=${datarootdir}/@PACKAGE@
 mandir=@mandir@
 localedir=@localedir@
 
