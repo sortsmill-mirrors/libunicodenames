@@ -1,4 +1,4 @@
-#  Copyright (C) 2012 Khaled Hosny and Barry Schwartz
+#  Copyright (C) 2012, 2013 Khaled Hosny and Barry Schwartz
 # 
 #  This file is part of LibUnicodeNames.
 #  
@@ -58,52 +58,28 @@ $(TESTSUITE): $(srcdir)/testsuite.at $(srcdir)/package.m4
 
 TESTS_ENVIRONMENT = @LOCALCHARSET_TESTS_ENVIRONMENT@
 
-dist_noinst_SCRIPTS = import_unicodenames.py create_delete.py			\
-	names_db_locale.py patch_test.py blocks.py blocks_index_error.py
-
-check_PROGRAMS =
-
-check_PROGRAMS += c_create_delete
-c_create_delete_SOURCES = c_create_delete.c
-c_create_delete_LDADD = $(top_builddir)/libunicodenames.la $(LDADD)
-
-check_PROGRAMS += c_names_db_locale
-c_names_db_locale_SOURCES = c_names_db_locale.c
-c_names_db_locale_LDADD = $(top_builddir)/libunicodenames.la $(LDADD)
-
-check_PROGRAMS += c_patch_test
-c_patch_test_SOURCES = c_patch_test.c
-c_patch_test_LDADD = $(top_builddir)/libunicodenames.la $(LDADD)
-
-#--------------------------------------------------------------------------
-
-if CXX_FFI
-
-check_PROGRAMS += cxx_create_delete
-cxx_create_delete_SOURCES = cxx_create_delete.cxx
-cxx_create_delete_LDADD = $(top_builddir)/libunicodenames++.la			\
-	$(top_builddir)/libunicodenames.la $(LDADD)
-
-check_PROGRAMS += cxx_names_db_locale
-cxx_names_db_locale_SOURCES = cxx_names_db_locale.cxx
-cxx_names_db_locale_LDADD = $(top_builddir)/libunicodenames++.la		\
-	$(top_builddir)/libunicodenames.la $(LDADD)
-
-check_PROGRAMS += cxx_patch_test
-cxx_patch_test_SOURCES = cxx_patch_test.cxx
-cxx_patch_test_LDADD = $(top_builddir)/libunicodenames++.la \
-	$(top_builddir)/libunicodenames.la $(LDADD)
-
-endif CXX_FFI
-
-#--------------------------------------------------------------------------
-
 AM_CPPFLAGS = -I$(top_builddir)/lib -I$(top_srcdir)/lib	\
 	-I$(top_srcdir)
 AM_CFLAGS = $(WARNING_CFLAGS)
 AM_CXXFLAGS = $(WARNING_CXXFLAGS)
 AM_LDFLAGS = $(LTLIBINTL)
-LDADD = $(top_builddir)/lib/libgnu.la
+LDADD = $(top_builddir)/libunicodenames.la		\
+	$(top_builddir)/lib/libgnu.la
+
+#--------------------------------------------------------------------------
+
+check_PROGRAMS =
+
+check_PROGRAMS += c_create_delete
+c_create_delete_SOURCES = c_create_delete.c
+
+check_PROGRAMS += c_names_db_locale
+c_names_db_locale_SOURCES = c_names_db_locale.c
+
+check_PROGRAMS += c_patch_test
+c_patch_test_SOURCES = c_patch_test.c
+
+#--------------------------------------------------------------------------
 
 check-local: override TESTSUITEFLAGS += LIBUNICODENAMES_INSTALLED=no
 

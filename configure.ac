@@ -22,7 +22,7 @@
 #--------------------------------------------------------------------------
 
 AC_PREREQ([2.68])
-AC_INIT([libunicodenames],[1.0.1],[https://github.com/sortsmill/libunicodenames/issues])
+AC_INIT([libunicodenames],[1.1.0],[https://github.com/sortsmill/libunicodenames/issues])
 AC_CONFIG_SRCDIR([make-names-db.awk])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config])
@@ -53,7 +53,6 @@ AC_SUBST([VERSION_PATCH])
 AC_SUBST([VERSION_EXTRA])
 AC_SUBST([VERSION_EXTRA_SHORT])
 
-
 #--------------------------------------------------------------------------
 #
 # Checks for programs.
@@ -63,8 +62,6 @@ AC_PROG_CC_C99
 gl_EARLY
 gl_INIT
 AM_PROG_CC_C_O
-AC_PROG_CXX
-AC_PROG_CXX_C_O
 AC_PROG_CPP
 AC_PROG_AWK
 AC_PROG_YACC
@@ -73,29 +70,9 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_MKDIR_P
 AC_PROG_SED
-AM_PATH_PYTHON([],[],[:])
 AC_PATH_PROGS([GAWK],[gawk],[gawk])
 AC_PATH_PROGS([INDENT],[indent],[indent])
 AC_PATH_PROGS([WGET],[wget],[wget])
-
-AC_ARG_ENABLE([c++],[AS_HELP_STRING([--enable-c++],[build C++ bindings])])
-AC_SUBST([enable_c__])
-AM_CONDITIONAL([CXX_FFI],[test x"${enable_c__}" = xyes])
-
-AC_ARG_ENABLE([python],
-   [AS_HELP_STRING([--enable-python],
-                   [build Python bindings (requires --enable-c++ and SWIG >= 2.0.4)])])
-AC_SUBST([enable_python])
-AM_CONDITIONAL([PYTHON_FFI],[test x"${enable_python}" = xyes])
-
-if test x"${enable_python}" = xyes; then
-   if test x"${enable_c__}" != xyes; then
-      AC_MSG_ERROR([--enable-python requires --enable-c++])
-   fi
-   AM_PATH_PYTHON
-   PKG_CHECK_MODULES([PYTHON],[python-"${PYTHON_VERSION}"])
-   AX_PKG_SWIG([2.0.4],[],[AC_MSG_ERROR([SWIG is required to build the Python bindings.])])
-fi
 
 #--------------------------------------------------------------------------
 #
@@ -109,7 +86,6 @@ fi
 AC_CHECK_HEADERS([argz.h fcntl.h float.h inttypes.h langinfo.h libintl.h limits.h locale.h malloc.h stddef.h stdint.h stdio_ext.h stdlib.h string.h sys/param.h unistd.h wchar.h])
 AC_HEADER_STDBOOL
 AC_FUNC_ALLOCA
-
 
 #--------------------------------------------------------------------------
 #
@@ -134,27 +110,10 @@ AX_CHECK_COMPILE_FLAG([-Wc++-compat],[WARNING_CFLAGS+=" -Wc++-compat"])
 AX_CHECK_COMPILE_FLAG([-Wno-unused-result],[WARNING_CFLAGS+=" -Wno-unused-result"])
 AC_LANG_POP
 
-if test x"${enable_c__}" = xyes; then
-   AC_LANG_PUSH([C++])
-
-   AC_SUBST([WARNING_CXXFLAGS],[])
-   AX_CHECK_COMPILE_FLAG([-Wall],[WARNING_CXXFLAGS+=" -Wall"])
-   AX_CHECK_COMPILE_FLAG([-Wextra],[WARNING_CXXFLAGS+=" -Wextra"])
-   AX_CHECK_COMPILE_FLAG([-Wcast-align],[WARNING_CXXFLAGS+=" -Wcast-align"])
-   AX_CHECK_COMPILE_FLAG([-Wno-unused-result],[WARNING_CXXFLAGS+=" -Wno-unused-result"])
-
-   AC_SUBST([SWIG_PYTHON_WARNING_CXXFLAGS],[])
-   AX_CHECK_COMPILE_FLAG([-Wno-unused-but-set-variable],
-                         [SWIG_PYTHON_WARNING_CXXFLAGS+=" -Wno-unused-but-set-variable"])
-
-   AC_LANG_POP
-fi
-
 VISIBLE=''
 test x"${HAVE_VISIBILITY}" = x1 && VISIBLE='__attribute__((__visibility__("default")))'
 AC_DEFINE_UNQUOTED([VISIBLE],[${VISIBLE}],
         [Define to the attribute for a visible symbol in a shared library.])
-
 
 #--------------------------------------------------------------------------
 #
@@ -162,7 +121,6 @@ AC_DEFINE_UNQUOTED([VISIBLE],[${VISIBLE}],
 
 AC_FUNC_MALLOC
 AM_GNU_GETTEXT([external])
-AC_FUNC_MALLOC
 AC_FUNC_MBRTOWC
 AC_FUNC_MMAP
 AC_FUNC_REALLOC
@@ -173,8 +131,7 @@ AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify floor getcwd localecon
 AC_SUBST([LT_OBJDIR],["${lt_cv_objdir}"])
 
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([libunicodenames.pc libunicodenames++.pc])
-AC_CONFIG_FILES([unicodenames.i])
+AC_CONFIG_FILES([libunicodenames.pc])
 AC_CONFIG_FILES([lib/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([tests/Makefile tests/atlocal])

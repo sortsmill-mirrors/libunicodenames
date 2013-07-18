@@ -5,6 +5,6 @@ common_code.c
 find_db.c
 use_blocks_db.c
 use_names_db.c
-cxx_bindings.cxx
+#cxx_bindings.cxx
 
 

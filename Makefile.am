@@ -1,4 +1,4 @@
-#  Copyright (C) 2012 Khaled Hosny and Barry Schwartz
+#  Copyright (C) 2012, 2013 Khaled Hosny and Barry Schwartz
 # 
 #  This file is part of LibUnicodeNames.
 #  
@@ -48,73 +48,6 @@ libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 	common_code.c noinst_header.h libgettext.h
 nodist_libunicodenames_la_SOURCES = config.h
 libunicodenames_la_LDFLAGS = -version-info 1:2:0 $(AM_LDFLAGS)
-
-#--------------------------------------------------------------------------
-
-if CXX_FFI
-
-AM_CXXFLAGS = $(WARNING_CXXFLAGS)
-
-nodist_pkgconfig_DATA += libunicodenames++.pc
-
-lib_LTLIBRARIES += libunicodenames++.la
-include_HEADERS += libunicodenames++.h
-
-libunicodenames___la_SOURCES = cxx_bindings.cxx noinst_header.h	\
-	libgettext.h
-nodist_libunicodenames___la_SOURCES = config.h
-libunicodenames___la_LIBADD = libunicodenames.la lib/libgnu.la
-libunicodenames___la_LDFLAGS = -version-info 1:2:0 $(AM_LDFLAGS)
-
-endif CXX_FFI
-
-#--------------------------------------------------------------------------
-
-if PYTHON_FFI
-
-python_PYTHON = unicodenames.py
-EXTRA_LTLIBRARIES = _unicodenames.la
-
-_unicodenames_la_SOURCES = unicodenames_wrap.cxx
-_unicodenames_la_CPPFLAGS = $(PYTHON_CFLAGS) $(AM_CPPFLAGS)
-_unicodenames_la_CXXFLAGS = $(WARNING_CXXFLAGS) $(SWIG_PYTHON_WARNING_CXXFLAGS)
-_unicodenames_la_LIBS =
-_unicodenames_la_LIBADD = libunicodenames++.la libunicodenames.la	\
-	lib/libgnu.la
-_unicodenames_la_LDFLAGS = -module -shared -avoid-version -rpath '$(pyexecdir)'
-
-# This ugly code exists so SWIG gets run if _either one_ of
-# unicodenames.py and unicodenames_wrap.cxx is out of date or missing.
-unicodenames.py unicodenames_wrap.cxx: stamp-pyffi
-	@if test ! -f $@; then rm -f stamp-pyffi; else :; fi
-	@if test ! -f $@; then $(MAKE) $(AM_MAKEFLAGS) stamp-pyffi; else :; fi
-
-stamp-pyffi: unicodenames.i libunicodenames.h
-	$(SWIG) -c++ -python -I$(srcdir) unicodenames.i
-	@if test -f unicodenames_wrap.cxx; then				\
-		echo '#include <config.h>' > unicodenames_wrap.cxx-tmp;	\
-		cat unicodenames_wrap.cxx >> unicodenames_wrap.cxx-tmp;	\
-		mv unicodenames_wrap.cxx-tmp unicodenames_wrap.cxx;	\
-	fi
-	@touch stamp-pyffi
-
-# Install the Python extension after the C and C++ libraries, so it
-# can be re-linked with them.
-install-exec-hook: _unicodenames.la
-	$(MKDIR_P) "$(DESTDIR)$(pyexecdir)" || exit 1
-	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install	\
-		$(INSTALL) $(INSTALL_STRIP_FLAG) _unicodenames.la			\
-		'$(DESTDIR)$(pyexecdir)'
-
-uninstall-hook:
-	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall	\
-		rm -f '$(DESTDIR)$(pyexecdir)/_unicodenames.la'
-
-mostlyclean-local:
-	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall	\
-		rm -f _unicodenames.la
-
-endif PYTHON_FFI
 
 #--------------------------------------------------------------------------
 
@@ -179,15 +112,8 @@ ListeDesNoms.txt:
 	$(WGET) $(NAMESLIST_FR) -O $@
 
 #--------------------------------------------------------------------------
-
-######################################################################
-##                                                                  ##
-##  A note for the developers:                                      ##
-##                                                                  ##
-##  You should use Mercurial (not Git) when making a dist package.  ##
-##  Otherwise you will not get the proper ChangeLog file.           ##
-##                                                                  ##
-######################################################################
+#
+# Use Mercurial to make a ChangeLog automatically.
 
 dist-hook: make-changelog
 
@@ -201,7 +127,7 @@ make-changelog:
 		echo; \
 	else \
 		echo "If you do not mind, please report that the ChangeLog is missing." > $(distdir)/ChangeLog; \
-		echo "Report at: https://github.com/chemoelectric/libunicodenames/issues" >> $(distdir)/ChangeLog; \
+		echo "Report at: https://bitbucket.org/sortsmill/libunicodenames/issues" >> $(distdir)/ChangeLog; \
 		echo; \
 		echo "----------------------------------------------------------------"; \
 		echo "The ChangeLog was not made! You need Mercurial to make it."; \
@@ -210,10 +136,6 @@ make-changelog:
 		echo "----------------------------------------------------------------"; \
 		echo; \
 	fi
-
-MOSTLYCLEANFILES = unicodenames.py unicodenames.pyc
-MOSTLYCLEANFILES += unicodenames.pyo unicodenames_wrap.cxx
-MOSTLYCLEANFILES += stamp-pyffi unicodenames_wrap.cxx-tmp
 
 DISTCLEANFILES = NamesList.txt ListeDesNoms.txt
 DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
@@ -237,7 +159,6 @@ blacklist_for_indent += config.h libgettext.h
 
 indent: indent-recursive
 	$(call do_indent, $(libunicodenames_la_SOURCES))
-	$(call do_indent, $(libunicodenames___la_SOURCES))
 	$(call do_indent, $(include_HEADERS))
 
 indent-recursive:
