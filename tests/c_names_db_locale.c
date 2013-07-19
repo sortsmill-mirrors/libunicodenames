@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-#include <dirname.h>
+#include <libgen.h>
 
 int
 main (int argc, char *argv[])
