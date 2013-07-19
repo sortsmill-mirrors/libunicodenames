@@ -48,9 +48,7 @@ installcheck-local: atconfig atlocal $(TESTSUITE)
 clean-local:
 	test ! -f '$(TESTSUITE)' || $(SHELL) '$(TESTSUITE)' --clean
 
-# Try obfuscating the reference to `autom4te' to prevent a Gentoo QA
-# notice.
-AUTOM4TE = $(SHELL) $(top_srcdir)/config/missing --run auto''m4te
+AUTOM4TE = $(SHELL) $(top_srcdir)/config/missing --run autom4te
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at $(srcdir)/package.m4
 	$(AUTOTEST) -I '$(srcdir)' -o $@-tmp $@.at
