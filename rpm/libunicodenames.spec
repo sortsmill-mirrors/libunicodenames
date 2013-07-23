@@ -48,8 +48,6 @@ make %{?_smp_mflags} check
 rm -rf %{buildroot}
 make %{?_smp_mflags} install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_infodir}/dir
-#
-# I hate removing these. GNU r00lz!
 rm -f %{buildroot}%{_libdir}/*.la
 
 %clean
