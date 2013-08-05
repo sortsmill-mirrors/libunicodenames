@@ -31,6 +31,7 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.11 dist-xz -Wall -Wno-portability])
+AX_CHECK_GNU_MAKE
 AM_SILENT_RULES([yes])
 AC_USE_SYSTEM_EXTENSIONS
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
@@ -127,23 +128,24 @@ AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify floor getcwd localecon
 
 AC_SUBST([LT_OBJDIR],["${lt_cv_objdir}"])
 
-AC_CONFIG_FILES([Makefile])
+StM_CONFIG_MAKEFILES
+StM_CONFIG_MAKEFILES([tests/Makefile],[tests/GNUmakefile])
+
 AC_CONFIG_FILES([libunicodenames.pc])
 AC_CONFIG_FILES([lib/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
-AC_CONFIG_FILES([tests/Makefile tests/atlocal])
+AC_CONFIG_FILES([tests/atlocal])
 
-AC_CONFIG_COMMANDS([.indent.pro],
-   [
-      if test "${ac_srcdir}" -ef "${ac_builddir}"; then
-         :
-      else
-         for dir in . tests; do
-             rm -f "${ac_builddir}/${dir}/.indent.pro"
-             (cd "${ac_builddir}/${dir}" && ${LN_S} "${ac_srcdir}"/.indent.pro .indent.pro)
-         done
-      fi
-   ])
+AC_CONFIG_COMMANDS([.indent.pro],[
+   if test "${ac_srcdir}" -ef "${ac_builddir}"; then
+      :
+   else
+      for dir in . tests; do
+          rm -f "${ac_builddir}/${dir}/.indent.pro"
+          (cd "${ac_builddir}/${dir}" && ${LN_S} "${ac_srcdir}"/.indent.pro .indent.pro)
+      done
+   fi
+])
 
 AC_OUTPUT
 
