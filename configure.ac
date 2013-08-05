@@ -31,27 +31,13 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.11 dist-xz -Wall -Wno-portability])
+AM_SILENT_RULES([yes])
 AC_USE_SYSTEM_EXTENSIONS
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 LT_INIT
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
-# I am going to try enabling silent-rules by default, so builders are
-# more likely to see warnings. Use --disable-silent-rules or "make
-# V=1" if you need to see the rules.
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
-
-VERSION_MAJOR=`AS_ECHO(["${PACKAGE_VERSION}"]) | sed -e 's/^\([[0-9]][[0-9]]*\).*/\1/'`
-VERSION_MINOR=`AS_ECHO(["${PACKAGE_VERSION}"]) | sed -e 's/^[[0-9]][[0-9]]*\.\([[0-9]][[0-9]]*\).*/\1/'`
-VERSION_PATCH=`AS_ECHO(["${PACKAGE_VERSION}"]) | sed -e 's/^[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*\.\([[0-9]][[0-9]]*\).*/\1/'`
-VERSION_EXTRA=`AS_ECHO(["${PACKAGE_VERSION}"]) | sed -e 's/^[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*\.[[0-9]][[0-9]]*\(.*\)/\1/' \
-                                                     -e 's/^_//'`
-VERSION_EXTRA_SHORT=`AS_ECHO(["${VERSION_EXTRA}"]) | sed -e 's/alpha/a/' -e 's/beta/b/'`
-AC_SUBST([VERSION_MAJOR])
-AC_SUBST([VERSION_MINOR])
-AC_SUBST([VERSION_PATCH])
-AC_SUBST([VERSION_EXTRA])
-AC_SUBST([VERSION_EXTRA_SHORT])
+StM_ANALYZE_PACKAGE_VERSION
 
 AC_ARG_ENABLE([nameslist-install],
         [AS_HELP_STRING([--enable-nameslist-install],
@@ -77,9 +63,13 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_MKDIR_P
 AC_PROG_SED
-AC_PATH_PROGS([GAWK],[gawk],[gawk])
-AC_PATH_PROGS([INDENT],[indent],[indent])
-AC_PATH_PROGS([WGET],[wget],[wget])
+StM_PROG_GAWK
+StM_PROG_GNU_INDENT
+StM_PROG_WGET
+
+test -z "${GAWK}" && GAWK=/bin/false
+test -z "${GNU_INDENT}" && GNU_INDENT=/bin/false
+test -z "${WGET}" && WGET=/bin/false
 
 #--------------------------------------------------------------------------
 #

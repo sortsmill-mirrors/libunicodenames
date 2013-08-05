@@ -20,4 +20,4 @@ INDENT_FLAGS =
 blacklist_for_indent =
 
 filter_for_indent = $(filter-out $(blacklist_for_indent), $(1))
-do_indent = $(INDENT) $(INDENT_FLAGS) $(addprefix $(srcdir)/, $(call filter_for_indent, $(1)))
+do_indent = $(GNU_INDENT) $(INDENT_FLAGS) $(addprefix $(srcdir)/, $(call filter_for_indent, $(1)))

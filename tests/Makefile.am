@@ -93,10 +93,7 @@ include $(top_srcdir)/indent.mk
 
 indent:
 	$(call do_indent, $(c_create_delete_SOURCES))
-	$(call do_indent, $(cxx_create_delete_SOURCES))
 	$(call do_indent, $(c_names_db_locale_SOURCES))
-	$(call do_indent, $(cxx_names_db_locale_SOURCES))
 	$(call do_indent, $(c_patch_test_SOURCES))
-	$(call do_indent, $(cxx_patch_test_SOURCES))
 
 #--------------------------------------------------------------------------

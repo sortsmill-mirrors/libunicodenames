@@ -16,7 +16,7 @@
 #  License along with LibUnicodeNames.  If not, see
 #  <http://www.gnu.org/licenses/>.
 
-ACLOCAL_AMFLAGS = -I m4 -I m4_ax
+ACLOCAL_AMFLAGS = -I m4 -I m4_ax --install
 
 SUBDIRS = lib . po tests
 
