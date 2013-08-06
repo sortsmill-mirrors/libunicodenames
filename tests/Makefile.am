@@ -81,19 +81,19 @@ c_patch_test_SOURCES = c_patch_test.c
 
 #--------------------------------------------------------------------------
 
-check-local: override TESTSUITEFLAGS += LIBUNICODENAMES_INSTALLED=no
+@ifGNUmake@check-local: override TESTSUITEFLAGS += LIBUNICODENAMES_INSTALLED=no
 
-installcheck-local: override TESTSUITEFLAGS += LIBUNICODENAMES_INSTALLED=yes
+@ifGNUmake@installcheck-local: override TESTSUITEFLAGS += LIBUNICODENAMES_INSTALLED=yes
 
 DISTCLEANFILES = atconfig
 
 #--------------------------------------------------------------------------
 
-include $(top_srcdir)/indent.mk
+include $(top_srcdir)/indent.am
 
-indent:
-	$(call do_indent, $(c_create_delete_SOURCES))
-	$(call do_indent, $(c_names_db_locale_SOURCES))
-	$(call do_indent, $(c_patch_test_SOURCES))
+@ifGNUmake@indent:
+@ifGNUmake@	$(call do_indent, $(c_create_delete_SOURCES))
+@ifGNUmake@	$(call do_indent, $(c_names_db_locale_SOURCES))
+@ifGNUmake@	$(call do_indent, $(c_patch_test_SOURCES))
 
 #--------------------------------------------------------------------------

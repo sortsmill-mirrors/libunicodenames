@@ -67,27 +67,27 @@ EXTRA_DIST = $(srcdir)/po/Rules-doc m4/gnulib-cache.m4 .indent.pro
 
 #--------------------------------------------------------------------------
 
-extract_text = $(GAWK) ' \
-BEGIN { pattern = "^[[:space:]]*(//|*)[[:space:]]*$1--[[:space:]]*(.*)[[:space:]]*" } \
-$$0 ~ pattern { match($$0, pattern, matches); print matches[2] }'
-
-$(srcdir)/%.type.texi: %.h
-	$(call extract_text,t) $< > $@
-
-$(srcdir)/%.func.texi: %.h
-	$(call extract_text,f) $< > $@
-
-extract-text: extract-libunicodenames-text
-
-extract-libunicodenames-text: $(LIBUNICODENAMES_H_TEXI)
-
-LIBUNICODENAMES_H_TEXI = $(srcdir)/libunicodenames.type.texi	\
-	$(srcdir)/libunicodenames.func.texi
-
-EXTRA_DIST += $(LIBUNICODENAMES_H_TEXI)
-
-$(srcdir)/README: $(srcdir)/libunicodenames.texi $(LIBUNICODENAMES_H_TEXI)
-	$(MAKEINFO) --plaintext --no-split $< > $@
+#extract_text = $(GAWK) ' \
+#BEGIN { pattern = "^[[:space:]]*(//|*)[[:space:]]*$1--[[:space:]]*(.*)[[:space:]]*" } \
+#$$0 ~ pattern { match($$0, pattern, matches); print matches[2] }'
+#
+#$(srcdir)/%.type.texi: %.h
+#	$(call extract_text,t) $< > $@
+#
+#$(srcdir)/%.func.texi: %.h
+#	$(call extract_text,f) $< > $@
+#
+#extract-text: extract-libunicodenames-text
+#
+#extract-libunicodenames-text: $(LIBUNICODENAMES_H_TEXI)
+#
+#LIBUNICODENAMES_H_TEXI = $(srcdir)/libunicodenames.type.texi	\
+#	$(srcdir)/libunicodenames.func.texi
+#
+#EXTRA_DIST += $(LIBUNICODENAMES_H_TEXI)
+#
+#$(srcdir)/README: $(srcdir)/libunicodenames.texi $(LIBUNICODENAMES_H_TEXI)
+#	$(MAKEINFO) --plaintext --no-split $< > $@
 
 #--------------------------------------------------------------------------
 
@@ -112,10 +112,10 @@ rebuild-blocks-db: NamesList.UTF-8 ListeDesNoms.UTF-8
 CRLF_TO_LF = $(SED) -e 's/\r//g'
 
 NamesList.UTF-8: NamesList.txt
-	$(CRLF_TO_LF) < $< > $@
+	$(CRLF_TO_LF) < NamesList.txt > $@
 
 ListeDesNoms.UTF-8: ListeDesNoms.txt
-	$(CRLF_TO_LF) < $< > $@
+	$(CRLF_TO_LF) < ListeDesNoms.txt > $@
 
 NamesList.txt:
 	$(WGET) $(NAMESLIST_EN) -O $@
@@ -165,15 +165,15 @@ distclean-local:
 
 #--------------------------------------------------------------------------
 
-include indent.mk
+include indent.am
 
 blacklist_for_indent += config.h libgettext.h
 
-indent: indent-recursive
-	$(call do_indent, $(libunicodenames_la_SOURCES))
-	$(call do_indent, $(include_HEADERS))
-
-indent-recursive:
-	$(MAKE) -C tests $(AM_MAKEFLAGS) indent
+@ifGNUmake@indent: indent-recursive
+@ifGNUmake@	$(call do_indent, $(libunicodenames_la_SOURCES))
+@ifGNUmake@	$(call do_indent, $(include_HEADERS))
+@ifGNUmake@
+@ifGNUmake@indent-recursive:
+@ifGNUmake@	$(MAKE) -C tests $(AM_MAKEFLAGS) indent
 
 #--------------------------------------------------------------------------
