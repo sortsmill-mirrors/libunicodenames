@@ -98,15 +98,11 @@ AC_TYPE_UINT32_T
 AC_TYPE_UINT8_T
 AC_CHECK_TYPES([ptrdiff_t])
 
-AC_LANG_PUSH([C])
 AC_SUBST([WARNING_CFLAGS],[])
-AX_CHECK_COMPILE_FLAG([-Wall],[WARNING_CFLAGS+=" -Wall"])
-AX_CHECK_COMPILE_FLAG([-Wextra],[WARNING_CFLAGS+=" -Wextra"])
-AX_CHECK_COMPILE_FLAG([-Wcast-align],[WARNING_CFLAGS+=" -Wcast-align"])
-AX_CHECK_COMPILE_FLAG([-Wbad-function-cast],[WARNING_CFLAGS+=" -Wbad-function-cast"])
-AX_CHECK_COMPILE_FLAG([-Wc++-compat],[WARNING_CFLAGS+=" -Wc++-compat"])
-AX_CHECK_COMPILE_FLAG([-Wno-unused-result],[WARNING_CFLAGS+=" -Wno-unused-result"])
-AC_LANG_POP
+StM_COMPILER_FLAGS([WARNING_CFLAGS],[
+   -Wall -Wextra -Wcast-align -Wbad-function-cast -Wc++-compat
+   -Wno-unused-result
+])
 
 VISIBLE=''
 test x"${HAVE_VISIBILITY}" = x1 && VISIBLE='__attribute__((__visibility__("default")))'
