@@ -22,30 +22,49 @@
 #--------------------------------------------------------------------------
 
 AC_PREREQ([2.68])
-AC_INIT([libunicodenames],[1.1.0_beta2],[https://bitbucket.org/sortsmill/libunicodenames/issues])
-AC_CONFIG_SRCDIR([make-names-db.awk])
+AC_INIT([LibUnicodeNames],
+        [1.2.0_beta1],
+        [http://bitbucket.org/sortsmill/libunicodenames/issues],
+        [libunicodenames],
+        [http://bitbucket.org/sortsmill/libunicodenames])
+
+AC_CONFIG_SRCDIR([make-names-db.in])
+
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_TESTDIR([tests])
-AC_CANONICAL_BUILD
-AC_CANONICAL_HOST
+AC_CONFIG_AUX_DIR([config])        dnl Where things like install-sh go.
+AC_CANONICAL_BUILD                 dnl On what platform are we compiling?
+AC_CANONICAL_HOST                  dnl For what platform are we compiling?
+AC_USE_SYSTEM_EXTENSIONS           dnl Define such macros as _GNU_SOURCE.
 AC_CONFIG_HEADERS([config.h])
+
 AM_INIT_AUTOMAKE([1.11 dist-xz -Wall -Wno-portability])
-AX_CHECK_GNU_MAKE
 AM_SILENT_RULES([yes])
-AC_USE_SYSTEM_EXTENSIONS
+AX_CHECK_GNU_MAKE
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 LT_INIT
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
+AC_CONFIG_TESTDIR([tests])
+
 StM_ANALYZE_PACKAGE_VERSION
+
+AC_ARG_VAR([NAMESLIST_EN_URL],[URL for the Unicode names list in English
+(default `http://www.unicode.org/Public/UNIDATA/NamesList.txt')])
+AC_ARG_VAR([NAMESLIST_FR_URL],[URL for the Unicode names list in French
+(default `http://hapax.qc.ca/ListeDesNoms-5.0.0.txt')])
+test -z "${NAMESLIST_EN_URL}" && NAMESLIST_EN_URL="http://www.unicode.org/Public/UNIDATA/NamesList.txt"
+test -z "${NAMESLIST_FR_URL}" && NAMESLIST_FR_URL="http://hapax.qc.ca/ListeDesNoms-5.0.0.txt"
+
+AC_ARG_ENABLE([make-libunicodenames-db],
+        [AS_HELP_STRING([--disable-make-libunicodenames-db],
+                [do not install make-libunicodenames-db])])
+test -z "${enable_make_libunicodenames_db}" && enable_make_libunicodenames_db=yes
 
 AC_ARG_ENABLE([nameslist-install],
         [AS_HELP_STRING([--enable-nameslist-install],
                 [install NamesList.UTF-8 and ListeDesNoms.UTF-8
                  for use in the testsuites of libunicodenames wrappers,
                  such as libunicodenames++])])
-AM_CONDITIONAL([NAMESLIST_INSTALL],[test x"${enable_nameslist_install}" = xyes])
 
 #--------------------------------------------------------------------------
 #
@@ -67,6 +86,19 @@ AC_PROG_SED
 StM_PROG_GAWK
 StM_PROG_GNU_INDENT
 StM_PROG_WGET
+
+StM_PROG_HELP2MAN
+AM_CONDITIONAL([HAVE_HELP2MAN],[test x"${HELP2MAN}" != x])
+
+if test -z "${GAWK}" -a x"${enable_make_libunicodenames_db}" = xyes; then
+   AC_MSG_ERROR([gawk not found. Please install it or run configure again with --disable-make-libunicodenames-db
+           Gawk website: http://www.gnu.org/software/gawk/])
+fi
+
+if test -z "${WGET}" -a x"${enable_make_libunicodenames_db}" = xyes; then
+   AC_MSG_ERROR([wget not found. Please install it or run configure again with --disable-make-libunicodenames-db
+           Wget website: http://www.gnu.org/software/wget/])
+fi
 
 test -z "${GAWK}" && GAWK=/bin/false
 test -z "${GNU_INDENT}" && GNU_INDENT=/bin/false
@@ -121,6 +153,11 @@ AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify floor getcwd localecon
 
 AC_SUBST([LT_OBJDIR],["${lt_cv_objdir}"])
 
+AM_CONDITIONAL([MAKE_LIBUNICODENAMES_DB_INSTALL],
+               [test x"${enable_make_libunicodenames_db}" = xyes])
+AM_CONDITIONAL([NAMESLIST_INSTALL],
+               [test x"${enable_nameslist_install}" = xyes])
+
 StM_CHANGELOGGERIZE
 
 StM_CONFIG_MAKEFILES
@@ -130,6 +167,10 @@ AC_CONFIG_FILES([libunicodenames.pc])
 AC_CONFIG_FILES([lib/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([tests/atlocal])
+
+AC_CONFIG_FILES([make-names-db],[chmod +x make-names-db])
+AC_CONFIG_FILES([make-blocks-db],[chmod +x make-blocks-db])
+AC_CONFIG_FILES([make-libunicodenames-db.in])
 
 AC_CONFIG_COMMANDS([.indent.pro],[
    if test "${ac_srcdir}" -ef "${ac_builddir}"; then

@@ -1,4 +1,4 @@
-#! /usr/bin/gawk -f
+#! @GAWK@ -f
 #
 # This script uses GNU Awk features.
 

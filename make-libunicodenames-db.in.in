@@ -1,0 +1,265 @@
+#!@SHELL@
+# -*- sh -*-
+
+copyright_string="Copyright (C) 2013 Khaled Hosny and Barry Schwartz"
+
+# Copyright (C) 2013 Khaled Hosny and Barry Schwartz
+# 
+# This file is part of LibUnicodeNames.
+# 
+# LibUnicodeNames is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+# 
+# LibUnicodeNames is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with LibUnicodeNames.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+set -e
+
+progname=`basename "${0}"`
+
+DEFAULT_NAMESLIST_EN_URL='@NAMESLIST_EN_URL@'
+DEFAULT_NAMESLIST_FR_URL='@NAMESLIST_FR_URL@'
+test -z "${NAMESLIST_EN_URL}" && NAMESLIST_EN_URL="${DEFAULT_NAMESLIST_EN_URL}"
+test -z "${NAMESLIST_FR_URL}" && NAMESLIST_FR_URL="${DEFAULT_NAMESLIST_FR_URL}"
+
+# Undocumented environment variables.
+test -z "${__MAKE_LIBUNICODENAMES_NAMES_DB__}" && \
+    __MAKE_LIBUNICODENAMES_NAMES_DB__='%%libexecdir%%/make-names-db'
+test -z "${__MAKE_LIBUNICODENAMES_BLOCKS_DB__}" && \
+    __MAKE_LIBUNICODENAMES_BLOCKS_DB__='%%libexecdir%%/make-blocks-db'
+
+GAWK='@GAWK@'
+WGET='@WGET@'
+SED='@SED@'
+
+langs="en fr"
+kinds="names blocks"
+
+exit_due_to_bad_command() {
+    echo "Try '""${progname}"" -h' for more information." >&2
+    exit 1
+}
+
+help_wanted=no
+version_wanted=no
+
+while getopts 'hV' flag; do
+    case "${flag}" in
+        h)
+            help_wanted=yes
+            ;;
+        V)
+            version_wanted=yes
+            ;;
+        ?)
+            exit_due_to_bad_command
+            ;;
+    esac
+done
+
+echo_help() {
+    cat <<EOF
+Usage: ${progname} [OPTION]... [DB_FILE_TO_CREATE]...
+Create \`database' files for LibUnicodeNames.
+
+Possible values for DB_FILE_TO_CREATE include:
+
+  en.names-db     Unicode names, in English
+
+  en.blocks-db    Unicode blocks, in English
+
+  fr.names-db     Unicode names, in French
+
+  fr.blocks-db    Unicode blocks, in French
+
+  en              both en.names-db and en.blocks-db
+
+  fr              both fr.names-db and fr.blocks-db
+
+  all             all the *.*-db files listed above
+
+Options:
+  -h          display this help and exit
+  -V          output version information and exit
+
+Files:
+
+  en.names-db    Glyph names and annotations in English
+
+  en.blocks-db   Blocks in English
+
+  fr.names-db    Glyph names and annotations in French
+
+  fr.blocks.db   Blocks in French
+
+  NamesList.UTF-8      Names list file (in English)
+
+  ListeDesNoms.UTF-8   Names list file (French translation)
+  
+Environment:
+  
+  NAMESLIST_EN_URL   URL for the names list in English
+                     (default ${DEFAULT_NAMESLIST_EN_URL})
+
+  NAMESLIST_FR_URL   URL for the names list in French
+                     (default ${DEFAULT_NAMESLIST_FR_URL})
+
+Examples:
+
+Update the currently installed \`database' files for English:
+  ${progname} en && sudo install -m644 en.{names,blocks}-db \`pkg-config --variable=pkgdatadir libunicodenames\`
+
+Report @PACKAGE@ bugs at @PACKAGE_BUGREPORT@
+@PACKAGE_NAME@ home page: @PACKAGE_URL@
+EOF
+}
+
+echo_version() {
+    cat <<EOF
+@PACKAGE@ @VERSION@
+${copyright_string}
+
+License LGPLv3+: GNU LGPL version 3 or later <http://gnu.org/licenses/lgpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Barry Schwartz.
+EOF
+}
+
+check_argument() {
+    good=no
+    for lang in ${langs}; do
+        for kind in ${kinds}; do
+            test x"${arg}" = x"${lang}.${kind}-db" && good=yes
+        done
+        test x"${arg}" = x"${lang}" && good=yes
+    done
+    test x"${arg}" = xall && good=yes
+
+    echo "${good}"
+}
+
+check_the_arguments() {
+    if test $# -eq 0; then
+        echo "${progname}: no \`database' file specified" >&2
+        exit_due_to_bad_command
+    fi
+    for arg in $@; do
+        if test x`check_argument "${arg}"` != xyes; then
+            echo "${progname}: argument \`${arg}' not recognized" >&2
+            exit_due_to_bad_command
+        fi
+    done
+}
+
+files_to_create() {
+    for lang in ${langs}; do
+        for kind in ${kinds}; do
+            eval "${lang}_${kind}_db"=no
+        done
+    done
+
+    for lang in ${langs}; do
+        for kind in ${kinds}; do
+            for arg in $@; do
+                test x"${arg}" = x"${lang}.${kind}-db" -o \
+                    x"${arg}" = x"${lang}" -o \
+                    x"${arg}" = xall && \
+                    eval "${lang}_${kind}_db"=yes
+            done
+        done
+    done
+
+    files=""
+    for lang in ${langs}; do
+        for kind in ${kinds}; do
+            eval test x'$'{"${lang}_${kind}_db"} = xyes && \
+                files="${files} ${lang}.${kind}-db"
+        done
+    done
+
+    echo "${files}"
+}
+
+filename_to_lang() {
+    echo "${1}" | ${SED} -e 's/^\([^.][^.]*\).*$/\1/'
+}
+
+filename_to_kind() {
+    echo "${1}" | ${SED} -e 's/^[^.][^.]*\.\([^-][^-]*\).*$/\1/'
+}
+
+to_uppercase() {
+    LC_ALL=C tr '[a-z]' '[A-Z]'
+}
+
+lang_to_url() {
+    eval echo '$'{NAMESLIST_`echo "${1}" | to_uppercase`_URL}
+}
+
+lang_to_nameslist_filename() {
+    case "${1}" in
+        en)
+            echo "NamesList.UTF-8"
+            ;;
+        fr)
+            echo "ListeDesNoms.UTF-8"
+            ;;
+        *)
+            echo "${progname}: internal error" >&2
+            exit 99
+            ;;
+    esac
+}
+
+crlf_to_lf() {
+    LC_ALL=C ${SED} -e 's/\r//g'
+}
+
+fetch_url() {
+    ${WGET} "${url}" -O - | crlf_to_lf
+}
+
+fetch_file() {
+    if test -f "${1}"; then
+        echo "File \`${1}' found."
+    else
+        fetch_url "${2}" > "${1}"
+        echo "File \`${1}' created."
+    fi
+}
+
+create_db_file() {
+    lang=`filename_to_lang "${1}"`
+    kind=`filename_to_kind "${1}"`
+    url=`lang_to_url "${lang}"`
+    nameslist_file=`lang_to_nameslist_filename "${lang}"`
+    eval db_maker='$'{__MAKE_LIBUNICODENAMES_`echo "${kind}" | to_uppercase`_DB__}
+
+    fetch_file "${nameslist_file}" "${url}"
+    LC_ALL=C ${db_maker} < "${nameslist_file}" > "${1}"
+    echo "File \`${1}' created."
+}
+
+if test x"${help_wanted}" = xyes; then
+    echo_help
+elif test x"${version_wanted}" = xyes; then
+    echo_version
+else
+    check_the_arguments $@
+    files=`files_to_create $@`
+    for f in ${files}; do
+        create_db_file "${f}"
+    done
+fi
+
+exit 0
