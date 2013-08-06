@@ -22,7 +22,7 @@
 #--------------------------------------------------------------------------
 
 AC_PREREQ([2.68])
-AC_INIT([libunicodenames],[1.1.0_beta1],[https://bitbucket.org/sortsmill/libunicodenames/issues])
+AC_INIT([libunicodenames],[1.1.0_beta2],[https://bitbucket.org/sortsmill/libunicodenames/issues])
 AC_CONFIG_SRCDIR([make-names-db.awk])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config])
@@ -104,10 +104,7 @@ StM_COMPILER_FLAGS([WARNING_CFLAGS],[
    -Wno-unused-result
 ])
 
-VISIBLE=''
-test x"${HAVE_VISIBILITY}" = x1 && VISIBLE='__attribute__((__visibility__("default")))'
-AC_DEFINE_UNQUOTED([VISIBLE],[${VISIBLE}],
-        [Define to the attribute for a visible symbol in a shared library.])
+StM_DEFINE_ATTR_VISIBLE([VISIBLE])
 
 #--------------------------------------------------------------------------
 #
