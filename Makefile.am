@@ -20,6 +20,13 @@ ACLOCAL_AMFLAGS = -I m4 --install
 
 SUBDIRS = lib . po tests
 
+DISTCLEANFILES = Makefile
+
+# Automatic ChangeLog generation at `make dist', if one has
+# sortsmill-changelogger.
+dist-hook: dist-changelog
+@dist_changelog_rules@
+
 #--------------------------------------------------------------------------
 
 NAMESLIST_EN = "http://www.unicode.org/Public/UNIDATA/NamesList.txt"
@@ -54,7 +61,7 @@ endif NAMESLIST_INSTALL
 lib_LTLIBRARIES += libunicodenames.la
 include_HEADERS += libunicodenames.h
 dist_pkgdata_DATA += en.names-db fr.names-db en.blocks-db fr.blocks-db
-info_TEXINFOS = libunicodenames.texi
+#info_TEXINFOS = libunicodenames.texi
 
 libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 	common_code.c noinst_header.h libgettext.h
@@ -124,34 +131,8 @@ ListeDesNoms.txt:
 	$(WGET) $(NAMESLIST_FR) -O $@
 
 #--------------------------------------------------------------------------
-#
-# Use Mercurial to make a ChangeLog automatically.
 
-dist-hook: make-changelog
-
-make-changelog:
-	@if hg log -r tip > /dev/null 2> /dev/null; then \
-		hg log --style=changelog > $(distdir)/ChangeLog; \
-		echo; \
-		echo "----------------------------------------------------------------"; \
-		echo "hg log --style=changelog > $(distdir)/ChangeLog"; \
-		echo "----------------------------------------------------------------"; \
-		echo; \
-	else \
-		echo "If you do not mind, please report that the ChangeLog is missing." > $(distdir)/ChangeLog; \
-		echo "Report at: https://bitbucket.org/sortsmill/libunicodenames/issues" >> $(distdir)/ChangeLog; \
-		echo; \
-		echo "----------------------------------------------------------------"; \
-		echo "The ChangeLog was not made! You need Mercurial to make it."; \
-		echo "If you are making a real release, please do it from within"; \
-		echo "a Mercurial repository. Consider using Mercurial with hg-git."; \
-		echo "----------------------------------------------------------------"; \
-		echo; \
-	fi
-
-#--------------------------------------------------------------------------
-
-DISTCLEANFILES = NamesList.txt ListeDesNoms.txt
+DISTCLEANFILES += NamesList.txt ListeDesNoms.txt
 DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
 
 distclean-local:

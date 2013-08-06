@@ -16,6 +16,8 @@
 #  License along with LibUnicodeNames.  If not, see
 #  <http://www.gnu.org/licenses/>.
 
+DISTCLEANFILES = Makefile
+
 #--------------------------------------------------------------------------
 
 # The `:;' works around a Bash 3.2 bug when the output is not writable.
@@ -85,7 +87,7 @@ c_patch_test_SOURCES = c_patch_test.c
 
 @ifGNUmake@installcheck-local: override TESTSUITEFLAGS += LIBUNICODENAMES_INSTALLED=yes
 
-DISTCLEANFILES = atconfig
+DISTCLEANFILES += atconfig
 
 #--------------------------------------------------------------------------
 

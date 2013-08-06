@@ -128,6 +128,8 @@ AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify floor getcwd localecon
 
 AC_SUBST([LT_OBJDIR],["${lt_cv_objdir}"])
 
+StM_CHANGELOGGERIZE
+
 StM_CONFIG_MAKEFILES
 StM_CONFIG_MAKEFILES([tests/Makefile],[tests/GNUmakefile])
 
