@@ -128,15 +128,21 @@ if HAVE_HELP2MAN
 
 man_MANS += make-libunicodenames-db.1
 CLEANFILES += make-libunicodenames-db.1
+
+# A reference for inclusion in the ‘SEE ALSO’ sections of mdoc
+# manpages.
 make_libunicodenames_db_reference += ,\n.Xr make-libunicodenames-db 1
 
 MY_HELP2MAN = $(HELP2MAN) --no-info --output=$@				\
 				--help-option='-h' --version-option='-V'	\
 				--source='Sorts Mill'
 
-make-libunicodenames-db.1: make-libunicodenames-db
+make-libunicodenames-db.1: make-libunicodenames-db make-libunicodenames-db.h2m
 	$(MY_HELP2MAN) --name='make-libunicodenames-db'			\
+		--include='$(srcdir)/make-libunicodenames-db.h2m'	\
 		./make-libunicodenames-db
+
+EXTRA_DIST += make-libunicodenames-db.h2m
 
 endif HAVE_HELP2MAN
 
