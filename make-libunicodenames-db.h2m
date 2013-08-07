@@ -1,3 +1,2 @@
 [SEE ALSO]
-.BR uninm_find_names_db (3),
-.BR uninm_find_blocks_db (3)
+uninm_find_names_db (3), uninm_find_blocks_db (3)
