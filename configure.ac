@@ -31,7 +31,7 @@ AC_INIT([LibUnicodeNames],
 AC_CONFIG_SRCDIR([make-names-db.in])
 
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_AUX_DIR([config])        dnl Where things like install-sh go.
+AC_CONFIG_AUX_DIR([config])
 AC_CANONICAL_BUILD                 dnl On what platform are we compiling?
 AC_CANONICAL_HOST                  dnl For what platform are we compiling?
 AC_USE_SYSTEM_EXTENSIONS           dnl Define such macros as _GNU_SOURCE.
@@ -171,6 +171,8 @@ AC_CONFIG_FILES([tests/atlocal])
 AC_CONFIG_FILES([make-names-db],[chmod +x make-names-db])
 AC_CONFIG_FILES([make-blocks-db],[chmod +x make-blocks-db])
 AC_CONFIG_FILES([make-libunicodenames-db.in])
+
+AC_CONFIG_COMMANDS([doc],[AS_MKDIR_P([doc])])
 
 AC_CONFIG_COMMANDS([.indent.pro],[
    if test "${ac_srcdir}" -ef "${ac_builddir}"; then

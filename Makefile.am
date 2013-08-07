@@ -36,6 +36,7 @@ EXTRA_DIST =
 MOSTLYCLEANFILES =
 CLEANFILES =
 DISTCLEANFILES = Makefile
+make_libunicodenames_db_reference =
 
 AM_CPPFLAGS = 											\
 	-I$(top_builddir)/lib -I$(top_srcdir)/lib			\
@@ -58,6 +59,20 @@ libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 	common_code.c noinst_header.h libgettext.h
 nodist_libunicodenames_la_SOURCES = config.h
 libunicodenames_la_LDFLAGS = -version-info 1:2:0 $(AM_LDFLAGS)
+
+man_MANS += doc/uninm_find_names_db.3
+man_MANS += doc/uninm_names_db_open.3
+man_MANS += doc/uninm_names_db_close.3
+man_MANS += doc/uninm_name.3
+man_MANS += doc/uninm_annotation.3
+
+%.3: %.3.in Makefile GNUmakefile
+	$(SED) -e 's|%%pkgdatadir%%|$(pkgdatadir)|g' \
+	       -e 's|%%make_libunicodenames_db_reference%%|$(make_libunicodenames_db_reference)|g' \
+	       $< > $@-tmp
+	mv $@-tmp $@
+
+EXTRA_DIST += doc/uninm_find_names_db.3.in
 
 #--------------------------------------------------------------------------
 
@@ -113,6 +128,7 @@ if HAVE_HELP2MAN
 
 man_MANS += make-libunicodenames-db.1
 CLEANFILES += make-libunicodenames-db.1
+make_libunicodenames_db_reference += ,\n.Xr make-libunicodenames-db 1
 
 MY_HELP2MAN = $(HELP2MAN) --no-info --output=$@				\
 				--help-option='-h' --version-option='-V'	\
@@ -136,6 +152,8 @@ NamesList.UTF-8:
 ListeDesNoms.UTF-8:
 	$(WGET) $(NAMESLIST_FR_URL) -O - | $(CRLF_TO_LF) > $@
 
+DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
+
 # A target for package maintainers.
 rebuild-db: rebuild-names-db rebuild-blocks-db
 
@@ -152,9 +170,6 @@ rebuild-blocks-db: NamesList.UTF-8 ListeDesNoms.UTF-8
 .PHONY: rebuild-db rebuild-names-db rebuild-blocks-db
 
 #--------------------------------------------------------------------------
-
-DISTCLEANFILES += NamesList.txt ListeDesNoms.txt
-DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
 
 distclean-local:
 	if test '$(top_srcdir)' -ef '$(top_builddir)'; then		\
