@@ -131,10 +131,10 @@ AC_TYPE_UINT8_T
 AC_CHECK_TYPES([ptrdiff_t])
 
 AC_SUBST([WARNING_CFLAGS],[])
-StM_COMPILER_FLAGS([WARNING_CFLAGS],[
-   -Wall -Wextra -Wcast-align -Wbad-function-cast -Wc++-compat
-   -Wno-unused-result
-])
+StM_GNU_C_FLAGS([WARNING_CFLAGS],
+   [-Wall -Wextra -Wcast-align -Wbad-function-cast -Wc++-compat
+    -Wno-unused-result],
+   [-Wl,--warn-common])
 
 StM_DEFINE_ATTR_VISIBLE([VISIBLE])
 
