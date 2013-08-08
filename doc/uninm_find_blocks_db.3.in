@@ -77,7 +77,7 @@ closes a blocks database, given its handle.  Afterwards the value of
 .Pa handle
 is meaningless.
 .Pp
-To read the data, given a blocks database handle, use the
+To read the data, given an open blocks database handle, use the
 .Fn uninm_num_blocks ,
 .Fn uninm_block_start ,
 .Fn uninm_block_end ,
@@ -88,7 +88,14 @@ functions. The
 function returns the total number of blocks. In calls to the other
 functions, the blocks are identified by their number starting from
 zero. The
-.Fn
+.Fn uninm_block_start
+and
+.Fn uninm_block_end
+functions return, respectively, the least-valued and greatest-valued
+code points in the block. The
+.Fn uninm_block_name
+function returns the name string of the block; the caller must not try
+to free the string.
 .\" .Sh IMPLEMENTATION NOTES
 .Sh RETURN VALUES
 On success, the
@@ -106,6 +113,28 @@ On success, the
 function returns an open handle for a blocks database. On failure, it returns
 .Dv NULL .
 .Pp
+The
+.Fn uninm_num_blocks
+function returns the total number of Unicode blocks. There is no
+return value to indicate an error.
+.Pp
+On success, the
+.Fn uninm_block_start
+and
+.Fn uninm_block_end
+functions return a Unicode code point. On failure (due to an out of
+range block number) they return 0xffffffff.
+.Pp
+On success, the
+.Fn uninm_block_name
+function returns a pointer to a null-terminated string containing the
+name of the Unicode block; on failure it returns
+.Dv NULL .
+The caller
+.Em "must not"
+call
+.Fn free 3
+with the string.
 .Sh FILES
 .Pa "%%pkgdatadir%%/en.blocks-db" ,
 .Pa "%%pkgdatadir%%/fr.blocks-db"
