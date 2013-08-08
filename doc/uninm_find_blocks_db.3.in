@@ -20,12 +20,12 @@
 .\"
 .\" This manpage is written in mdoc. See groff_mdoc(7).
 .\"
-.Dt UNINM_FIND_NAMES_DB 3
+.Dt UNINM_FIND_BLOCKS_DB 3
 .Os
 .Sh NAME
-.Nm uninm_find_names_db ,
-.Nm uninm_names_db_open ,
-.Nm uninm_names_db_close ,
+.Nm uninm_find_blocks_db ,
+.Nm uninm_blocks_db_open ,
+.Nm uninm_blocks_db_close ,
 .Nm uninm_name ,
 .Nm uninm_annotation
 .Nd retrieve names and annotations of Unicode code points
@@ -33,19 +33,23 @@
 .Sh SYNOPSIS
 .In libunicodenames.h
 .Ft "char *"
-.Fn uninm_find_names_db "const char *locale_base"
-.Ft uninm_names_db
-.Fn uninm_names_db_open "const char *filename"
+.Fn uninm_find_blocks_db "const char *locale_base"
+.Ft uninm_blocks_db
+.Fn uninm_blocks_db_open "const char *filename"
 .Ft void
-.Fn uninm_names_db_close "uninm_names_db handle"
+.Fn uninm_blocks_db_close "uninm_blocks_db handle"
+.Ft size_t
+.Fn uninm_num_blocks "uninm_blocks_db handle"
+.Ft "unsigned int"
+.Fn uninm_block_start "uninm_blocks_db handle" "int i"
+.Ft "unsigned int"
+.Fn uninm_block_end "uninm_blocks_db handle" "int i"
 .Ft "const char *"
-.Fn uninm_name "uninm_names_db handle" "unsigned int codepoint"
-.Ft "const char *"
-.Fn uninm_annotation "uninm_names_db handle" "unsigned int codepoint"
+.Fn uninm_block_name "uninm_blocks_db handle" "int i"
 .Sh DESCRIPTION
 The
-.Fn uninm_find_names_db
-function returns the path of the names database for the current
+.Fn uninm_find_blocks_db
+function returns the path of the blocks database for the current
 locale. The caller should call
 .Fn free 3
 on the string when done with it.
@@ -56,71 +60,55 @@ is not
 then use it as the base directory for MO (compiled gettext) files;
 otherwise use the compiled-in locale directory.
 Databases accessible through the compiled-in directory are
-.Pa "%%pkgdatadir%%/en.names-db"
+.Pa "%%pkgdatadir%%/en.blocks-db"
 and
-.Pa "%%pkgdatadir%%/fr.names-db" ,
+.Pa "%%pkgdatadir%%/fr.blocks-db" ,
 corresponding to English and French locales, respectively.
 .Pp
 The
-.Fn uninm_names_db_open
-function open a names database, given its path, returning an opaque
+.Fn uninm_blocks_db_open
+function open a blocks database, given its path, returning an opaque
 pointer to act as a handle.
 .Pp
 The
-.Fn uninm_names_db_close
-closes a names database, given its handle.  Afterwards the value of
+.Fn uninm_blocks_db_close
+closes a blocks database, given its handle.  Afterwards the value of
 .Pa handle
 is meaningless.
 .Pp
-The
-.Fn uninm_name
+FIXME: Write documentation here for
+.Fn uninm_num_blocks ,
+.Fn uninm_block_start ,
+.Fn uninm_block_end ,
 and
-.Fn uninm_annotation
-functions return, respectively, name and annotation strings associated
-with a given Unicode code point. The
-.Pa handle
-parameter must refer to an open names database. The caller must not
-try to free the returned string.
+.Fn uninm_block_name .
 .\" .Sh IMPLEMENTATION NOTES
 .Sh RETURN VALUES
 On success, the
-.Fn uninm_find_names_db
+.Fn uninm_find_blocks_db
 function returns a pointer to a null-terminated string, which
 eventually should be freed by calling
 .Fn free 3 .
 On failure,
-.Fn uninm_find_names_db
+.Fn uninm_find_blocks_db
 returns
 .Dv NULL .
 .Pp
 On success, the
-.Fn uninm_names_db_open
-function returns an open handle for a names database. On failure, it returns
+.Fn uninm_blocks_db_open
+function returns an open handle for a blocks database. On failure, it returns
 .Dv NULL .
 .Pp
-The
-.Fn uninm_name
-and
-.Fn uninm_annotation
-functions return a pointer to a null-terminated string, if there is a
-database entry corresponding to the given code point; otherwise they
-return
-.Dv NULL .
-The caller
-.Em "must not"
-call
-.Fn free 3
-with the string.
 .Sh FILES
-.Pa "%%pkgdatadir%%/en.names-db" ,
-.Pa "%%pkgdatadir%%/fr.names-db"
+.Pa "%%pkgdatadir%%/en.blocks-db" ,
+.Pa "%%pkgdatadir%%/fr.blocks-db"
 .Sh EXAMPLES
 FIXME.
 .\" .Sh ERRORS
 .Sh SEE ALSO
 .\" A make-libunicodenames-db(1) reference is inserted by the Makefile
  \" if that manpage is made.
-.Xr uninm_find_blocks_db 3 %%make_libunicodenames_db_reference%%
+.Xr uninm_find_names_db 3 %%make_libunicodenames_db_reference%%
 .\" .Sh STANDARDS
 .\" .Sh HISTORY
 .Sh AUTHORS

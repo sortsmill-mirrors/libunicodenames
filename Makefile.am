@@ -53,7 +53,6 @@ nodist_pkgconfig_DATA += libunicodenames.pc
 lib_LTLIBRARIES += libunicodenames.la
 include_HEADERS += libunicodenames.h
 dist_pkgdata_DATA += en.names-db fr.names-db en.blocks-db fr.blocks-db
-#info_TEXINFOS = libunicodenames.texi
 
 libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 	common_code.c noinst_header.h libgettext.h
@@ -65,6 +64,13 @@ man_MANS += doc/uninm_names_db_open.3
 man_MANS += doc/uninm_names_db_close.3
 man_MANS += doc/uninm_name.3
 man_MANS += doc/uninm_annotation.3
+man_MANS += doc/uninm_find_blocks_db.3
+man_MANS += doc/uninm_blocks_db_open.3
+man_MANS += doc/uninm_blocks_db_close.3
+man_MANS += doc/uninm_num_blocks.3
+man_MANS += doc/uninm_block_start.3
+man_MANS += doc/uninm_block_end.3
+man_MANS += doc/uninm_block_name.3
 
 %.3: %.3.in Makefile GNUmakefile
 	$(SED) -e 's|%%pkgdatadir%%|$(pkgdatadir)|g' \
@@ -77,30 +83,6 @@ EXTRA_DIST += doc/uninm_find_names_db.3.in
 #--------------------------------------------------------------------------
 
 EXTRA_DIST += $(srcdir)/po/Rules-doc m4/gnulib-cache.m4 .indent.pro
-
-#--------------------------------------------------------------------------
-
-#extract_text = $(GAWK) ' \
-#BEGIN { pattern = "^[[:space:]]*(//|*)[[:space:]]*$1--[[:space:]]*(.*)[[:space:]]*" } \
-#$$0 ~ pattern { match($$0, pattern, matches); print matches[2] }'
-#
-#$(srcdir)/%.type.texi: %.h
-#	$(call extract_text,t) $< > $@
-#
-#$(srcdir)/%.func.texi: %.h
-#	$(call extract_text,f) $< > $@
-#
-#extract-text: extract-libunicodenames-text
-#
-#extract-libunicodenames-text: $(LIBUNICODENAMES_H_TEXI)
-#
-#LIBUNICODENAMES_H_TEXI = $(srcdir)/libunicodenames.type.texi	\
-#	$(srcdir)/libunicodenames.func.texi
-#
-#EXTRA_DIST += $(LIBUNICODENAMES_H_TEXI)
-#
-#$(srcdir)/README: $(srcdir)/libunicodenames.texi $(LIBUNICODENAMES_H_TEXI)
-#	$(MAKEINFO) --plaintext --no-split $< > $@
 
 #--------------------------------------------------------------------------
 
