@@ -30,6 +30,10 @@ under the package name `libunicodenames'.
 To use LibUnicodeNames without pkg-config, use the `-lunicodenames'
 linker flag or the `libunicodenames.la' libtool archive file.
 
+See also the manpages uninm_find_blocks_db(3), uninm_find_names_db(3),
+and optionally make-libunicodenames-db(1) that are installed along
+with LibUnicodeNames.
+
 
 --
 * Copyright (C) 2013 Khaled Hosny and Barry Schwartz
