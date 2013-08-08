@@ -47,7 +47,8 @@ AM_CPPFLAGS = 											\
 AM_CFLAGS = $(WARNING_CFLAGS) $(CFLAG_VISIBILITY)
 AM_LDFLAGS = $(LTLIBINTL)
 
-EXTRA_DIST += examples/print_names.c examples/print_blocks.c
+EXTRA_DIST += INSTALL.C++ examples/print_names.c	\
+	examples/print_blocks.c
 
 #--------------------------------------------------------------------------
 
