@@ -29,7 +29,8 @@
 .Nm uninm_name ,
 .Nm uninm_annotation
 .Nd retrieve names and annotations of Unicode code points
-.\".Sh LIBRARY
+.Sh LIBRARY
+LibUnicodeNames Library (libunicodenames, -lunicodenames)
 .Sh SYNOPSIS
 .In libunicodenames.h
 .Ft "char *"
