@@ -137,6 +137,7 @@ main (int argc, char **argv)
   if (dbfile == NULL)
     exit (1);
   db = uninm_names_db_open (dbfile);
+  free (dbfile);
   if (db == NULL)
     exit (1);
   for (codepoint = 0; codepoint <= 999; codepoint++)

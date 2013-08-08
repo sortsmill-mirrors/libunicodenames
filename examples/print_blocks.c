@@ -23,6 +23,7 @@ main (int argc, char **argv)
   if (dbfile == NULL)
     exit (1);
   db = uninm_blocks_db_open (dbfile);
+  free (dbfile);
   if (db == NULL)
     exit (1);
   numblocks = uninm_num_blocks (db);
