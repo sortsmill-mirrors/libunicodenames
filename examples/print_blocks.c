@@ -28,9 +28,6 @@ main (int argc, char **argv)
   numblocks = uninm_num_blocks (db);
   for (i = 0; i < numblocks; i++)
     {
-      /* FIXME: The second argument to these functions probably ought
-	 to be a size_t, not an int. NOTE THAT THIS WILL CHANGE THE
-	 ABI. */
       start = uninm_block_start (db, i);
       end = uninm_block_end (db, i);
       name = uninm_block_name (db, i);
