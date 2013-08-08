@@ -2,16 +2,12 @@
  * The example program of the uninm_find_names_db(3) manpage.
  *
  * Prints names and annotations corresponding to code points 0 to 999.
- *
- * Compile with
- *
- *    cc -o print_names `pkg-config --cflags libunicodenames` \
- *      print_names.c `pkg-config --libs libunicodenames`
  */
 
 #include <libunicodenames.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
 
 int
 main (int argc, char **argv)
@@ -21,6 +17,7 @@ main (int argc, char **argv)
   uninm_names_db db;
   const char *name, *annot;
 
+  setlocale(LC_ALL, "");
   dbfile = uninm_find_names_db (NULL);
   if (dbfile == NULL)
     exit (1);
