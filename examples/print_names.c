@@ -2,6 +2,14 @@
  * The example program of the uninm_find_names_db(3) manpage.
  *
  * Prints names and annotations corresponding to code points 0 to 999.
+ *
+ *
+ * Copyright (C) 2013 Khaled Hosny and Barry Schwartz
+ * 
+ * Copying and distribution of this file, with or without modification,
+ * are permitted in any medium without royalty provided the copyright
+ * notice and this notice are preserved.  This file is offered as-is,
+ * without any warranty.
  */
 
 #include <libunicodenames.h>
