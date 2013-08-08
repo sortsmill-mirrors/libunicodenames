@@ -15,11 +15,20 @@ the current domain is French.
 To build LibUnicodeNames one needs a C99 compiler, preferably GNU C
 version 4.0 or greater. The following GNU programs are recommended but
 not necessary for building and using LibUnicodeNames: GNU Make, Gawk,
-Wget, and help2man. LibUnicodeNames includes support for pkg-config
-(http://www.freedesktop.org/wiki/Software/pkg-config/).
+Wget, and help2man.
 
 See the file INSTALL for generic compilation and installation
 instructions.
+
+
+Using LibUnicodeNames ---------
+
+LibUnicodeNames includes support for pkg-config
+(http://www.freedesktop.org/wiki/Software/pkg-config/); it will appear
+under the package name `libunicodenames'.
+
+To use LibUnicodeNames without pkg-config, use the `-lunicodenames'
+linker flag or the `libunicodenames.la' libtool archive file.
 
 
 --
