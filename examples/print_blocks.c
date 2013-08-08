@@ -1,7 +1,8 @@
 /*
  * The example program of the uninm_find_blocks_db(3) manpage.
  *
- * Prints the block start and end points and their names.
+ * Prints the start points, end points, and names of the Unicode
+ * blocks.
  */
 
 #include <libunicodenames.h>
