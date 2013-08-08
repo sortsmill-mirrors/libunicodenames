@@ -60,7 +60,7 @@ dist_pkgdata_DATA += en.names-db fr.names-db en.blocks-db fr.blocks-db
 libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 	common_code.c noinst_header.h libgettext.h
 nodist_libunicodenames_la_SOURCES = config.h
-libunicodenames_la_LDFLAGS = -version-info 1:2:0 $(AM_LDFLAGS)
+libunicodenames_la_LDFLAGS = -version-info 1:3:0 $(AM_LDFLAGS)
 
 nodist_man_MANS += doc/uninm_find_names_db.3
 dist_man_MANS += doc/uninm_names_db_open.3

@@ -42,11 +42,11 @@ LibUnicodeNames Library (libunicodenames, -lunicodenames)
 .Ft size_t
 .Fn uninm_num_blocks "uninm_blocks_db handle"
 .Ft "unsigned int"
-.Fn uninm_block_start "uninm_blocks_db handle" "int i"
+.Fn uninm_block_start "uninm_blocks_db handle" "int block_number"
 .Ft "unsigned int"
-.Fn uninm_block_end "uninm_blocks_db handle" "int i"
+.Fn uninm_block_end "uninm_blocks_db handle" "int block_number"
 .Ft "const char *"
-.Fn uninm_block_name "uninm_blocks_db handle" "int i"
+.Fn uninm_block_name "uninm_blocks_db handle" "int block_number"
 .Sh DESCRIPTION
 The
 .Fn uninm_find_blocks_db
@@ -77,12 +77,18 @@ closes a blocks database, given its handle.  Afterwards the value of
 .Pa handle
 is meaningless.
 .Pp
-FIXME: Write documentation here for
+To read the data, given a blocks database handle, use the
 .Fn uninm_num_blocks ,
 .Fn uninm_block_start ,
 .Fn uninm_block_end ,
 and
-.Fn uninm_block_name .
+.Fn uninm_block_name
+functions. The
+.Fn uninm_num_blocks
+function returns the total number of blocks. In calls to the other
+functions, the blocks are identified by their number starting from
+zero. The
+.Fn
 .\" .Sh IMPLEMENTATION NOTES
 .Sh RETURN VALUES
 On success, the

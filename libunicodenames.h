@@ -163,35 +163,35 @@ size_t uninm_num_blocks (uninm_blocks_db handle);
 
 /*
  * f--
- * f-- @deftypefn {Library Function} {unsigned int} uninm_block_start (uninm_blocks_db @var{handle}, int @var{i})
+ * f-- @deftypefn {Library Function} {unsigned int} uninm_block_start (uninm_blocks_db @var{handle}, int @var{block_number})
  * f--
  * FIXME: Write something here.
  * f--
  * f-- @end deftypefn
  * f--
  */
-unsigned int uninm_block_start (uninm_blocks_db handle, int i);
+unsigned int uninm_block_start (uninm_blocks_db handle, int block_number);
 
 /*
  * f--
- * f-- @deftypefn {Library Function} {unsigned int} uninm_block_end (uninm_blocks_db @var{handle}, int @var{i})
+ * f-- @deftypefn {Library Function} {unsigned int} uninm_block_end (uninm_blocks_db @var{handle}, int @var{block_number})
  * f--
  * FIXME: Write something here.
  * f--
  * f-- @end deftypefn
  * f--
  */
-unsigned int uninm_block_end (uninm_blocks_db handle, int i);
+unsigned int uninm_block_end (uninm_blocks_db handle, int block_number);
 
 /*
  * f--
- * f-- @deftypefn {Library Function} {unsigned int} uninm_block_name (uninm_blocks_db @var{handle}, int @var{i})
+ * f-- @deftypefn {Library Function} {unsigned int} uninm_block_name (uninm_blocks_db @var{handle}, int @var{block_number})
  * f--
  * f--
  * f-- @end deftypefn
  * f--
  */
-const char *uninm_block_name (uninm_blocks_db handle, int i);
+const char *uninm_block_name (uninm_blocks_db handle, int block_number);
 
 #if 0
 {
