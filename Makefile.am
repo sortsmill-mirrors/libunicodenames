@@ -31,7 +31,8 @@ nodist_bin_SCRIPTS =
 dist_noinst_SCRIPTS =
 nodist_libexec_SCRIPTS =
 nodist_EXTRA_DATA =
-man_MANS =
+dist_man_MANS =
+nodist_man_MANS =
 EXTRA_DIST =
 MOSTLYCLEANFILES =
 CLEANFILES =
@@ -46,6 +47,8 @@ AM_CPPFLAGS = 											\
 AM_CFLAGS = $(WARNING_CFLAGS) $(CFLAG_VISIBILITY)
 AM_LDFLAGS = $(LTLIBINTL)
 
+EXTRA_DIST += examples/print_names.c
+
 #--------------------------------------------------------------------------
 
 nodist_pkgconfig_DATA += libunicodenames.pc
@@ -59,18 +62,19 @@ libunicodenames_la_SOURCES = use_names_db.c use_blocks_db.c find_db.c	\
 nodist_libunicodenames_la_SOURCES = config.h
 libunicodenames_la_LDFLAGS = -version-info 1:2:0 $(AM_LDFLAGS)
 
-man_MANS += doc/uninm_find_names_db.3
-man_MANS += doc/uninm_names_db_open.3
-man_MANS += doc/uninm_names_db_close.3
-man_MANS += doc/uninm_name.3
-man_MANS += doc/uninm_annotation.3
-man_MANS += doc/uninm_find_blocks_db.3
-man_MANS += doc/uninm_blocks_db_open.3
-man_MANS += doc/uninm_blocks_db_close.3
-man_MANS += doc/uninm_num_blocks.3
-man_MANS += doc/uninm_block_start.3
-man_MANS += doc/uninm_block_end.3
-man_MANS += doc/uninm_block_name.3
+nodist_man_MANS += doc/uninm_find_names_db.3
+dist_man_MANS += doc/uninm_names_db_open.3
+dist_man_MANS += doc/uninm_names_db_close.3
+dist_man_MANS += doc/uninm_name.3
+dist_man_MANS += doc/uninm_annotation.3
+
+nodist_man_MANS += doc/uninm_find_blocks_db.3
+dist_man_MANS += doc/uninm_blocks_db_open.3
+dist_man_MANS += doc/uninm_blocks_db_close.3
+dist_man_MANS += doc/uninm_num_blocks.3
+dist_man_MANS += doc/uninm_block_start.3
+dist_man_MANS += doc/uninm_block_end.3
+dist_man_MANS += doc/uninm_block_name.3
 
 %.3: %.3.in Makefile GNUmakefile
 	$(SED) -e 's|%%pkgdatadir%%|$(pkgdatadir)|g' \
@@ -78,7 +82,9 @@ man_MANS += doc/uninm_block_name.3
 	       $< > $@-tmp
 	mv $@-tmp $@
 
-EXTRA_DIST += doc/uninm_find_names_db.3.in
+EXTRA_DIST += doc/uninm_find_names_db.3.in		\
+	doc/uninm_find_blocks_db.3.in
+MOSTLYCLEANFILES += doc/uninm_find_names_db.3 doc/uninm_find_blocks_db.3
 
 #--------------------------------------------------------------------------
 
@@ -100,6 +106,7 @@ endif !NAMESLIST_INSTALL
 if MAKE_LIBUNICODENAMES_DB_INSTALL #--------------
 
 nodist_bin_SCRIPTS += make-libunicodenames-db
+MOSTLYCLEANFILES += make-libunicodenames-db
 
 make-libunicodenames-db: make-libunicodenames-db.in Makefile GNUmakefile
 	$(SED) -e 's|%%libexecdir%%|$(libexecdir)|g' make-libunicodenames-db.in > $@-tmp
@@ -108,7 +115,7 @@ make-libunicodenames-db: make-libunicodenames-db.in Makefile GNUmakefile
 
 if HAVE_HELP2MAN
 
-man_MANS += make-libunicodenames-db.1
+nodist_man_MANS += make-libunicodenames-db.1
 CLEANFILES += make-libunicodenames-db.1
 
 # A reference for inclusion in the ‘SEE ALSO’ sections of mdoc
