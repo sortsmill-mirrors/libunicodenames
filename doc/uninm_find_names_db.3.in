@@ -1,4 +1,4 @@
-.Dd August 8, 2013
+.Dd August 9, 2013
 .\"
 .\" Copyright (C) 2013 Khaled Hosny and Barry Schwartz
 .\"
@@ -51,15 +51,15 @@ locale. The caller should call
 .Fn free 3
 on the string when done with it.
 If
-.Pa locale_base
+.Ar locale_base
 is not
 .Dv NULL ,
 then use it as the base directory for MO (compiled gettext) files;
 otherwise use the compiled-in locale directory.
 Databases accessible through the compiled-in directory are
-.Pa "%%pkgdatadir%%/en.names-db"
+.Ar "%%pkgdatadir%%/en.names-db"
 and
-.Pa "%%pkgdatadir%%/fr.names-db" ,
+.Ar "%%pkgdatadir%%/fr.names-db" ,
 corresponding to English and French locales, respectively.
 .Pp
 The
@@ -70,7 +70,7 @@ pointer to act as a handle.
 The
 .Fn uninm_names_db_close
 closes a names database, given its handle.  Afterwards the value of
-.Pa handle
+.Ar handle
 is meaningless.
 .Pp
 The
@@ -79,7 +79,7 @@ and
 .Fn uninm_annotation
 functions return, respectively, name and annotation strings associated
 with a given Unicode code point. The
-.Pa handle
+.Ar handle
 parameter must refer to an open names database. The caller must not
 try to free the returned string.
 .\" .Sh IMPLEMENTATION NOTES
@@ -113,8 +113,8 @@ call
 .Fn free 3
 with the string.
 .Sh FILES
-.Pa "%%pkgdatadir%%/en.names-db" ,
-.Pa "%%pkgdatadir%%/fr.names-db"
+.Ar "%%pkgdatadir%%/en.names-db" ,
+.Ar "%%pkgdatadir%%/fr.names-db"
 .Sh EXAMPLE
 The following program prints names and annotations corresponding to
 the code points between 0 and 999, inclusive.
