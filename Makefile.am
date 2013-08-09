@@ -29,7 +29,7 @@ lib_LTLIBRARIES =
 include_HEADERS =
 nodist_bin_SCRIPTS =
 dist_noinst_SCRIPTS =
-nodist_libexec_SCRIPTS =
+nodist_pkglibexec_SCRIPTS =
 nodist_EXTRA_DATA =
 dist_man_MANS =
 nodist_man_MANS =
@@ -95,8 +95,8 @@ EXTRA_DIST += $(srcdir)/po/Rules-doc m4/gnulib-cache.m4 .indent.pro
 
 NAMESLISTS = NamesList.UTF-8 ListeDesNoms.UTF-8
 
-nodist_libexec_SCRIPTS += make-names-db make-blocks-db
-MOSTLYCLEANFILES += $(nodist_libexec_SCRIPTS)
+nodist_pkglibexec_SCRIPTS += make-names-db make-blocks-db
+MOSTLYCLEANFILES += $(nodist_pkglibexec_SCRIPTS)
 
 if NAMESLIST_INSTALL
 nodist_pkgdata_DATA += $(NAMESLISTS)
@@ -110,7 +110,7 @@ nodist_bin_SCRIPTS += make-libunicodenames-db
 MOSTLYCLEANFILES += make-libunicodenames-db
 
 make-libunicodenames-db: make-libunicodenames-db.in Makefile GNUmakefile
-	$(SED) -e 's|%%libexecdir%%|$(libexecdir)|g' make-libunicodenames-db.in > $@-tmp
+	$(SED) -e 's|%%pkglibexecdir%%|$(pkglibexecdir)|g' make-libunicodenames-db.in > $@-tmp
 	mv $@-tmp $@
 	chmod +x $@
 

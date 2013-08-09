@@ -32,9 +32,9 @@ test -z "${NAMESLIST_FR_URL}" && NAMESLIST_FR_URL="${DEFAULT_NAMESLIST_FR_URL}"
 
 # Undocumented environment variables.
 test -z "${__MAKE_LIBUNICODENAMES_NAMES_DB__}" && \
-    __MAKE_LIBUNICODENAMES_NAMES_DB__='%%libexecdir%%/make-names-db'
+    __MAKE_LIBUNICODENAMES_NAMES_DB__='%%pkglibexecdir%%/make-names-db'
 test -z "${__MAKE_LIBUNICODENAMES_BLOCKS_DB__}" && \
-    __MAKE_LIBUNICODENAMES_BLOCKS_DB__='%%libexecdir%%/make-blocks-db'
+    __MAKE_LIBUNICODENAMES_BLOCKS_DB__='%%pkglibexecdir%%/make-blocks-db'
 
 GAWK='@GAWK@'
 WGET='@WGET@'
