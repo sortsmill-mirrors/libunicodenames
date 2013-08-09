@@ -30,10 +30,7 @@
 .Nm uninm_annotation
 .Nd retrieve names and annotations of Unicode code points
 .Sh LIBRARY
-.\" This section is supposed to contain only a call to the .Lb macro,
- \" but libunicodenames probably is not going to be listed in
- \" mdoc.local or the like.
-LibUnicodeNames Library (libunicodenames, -lunicodenames)
+.Lb libunicodenames
 .Sh SYNOPSIS
 .In libunicodenames.h
 .Ft "char *"
