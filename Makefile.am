@@ -93,7 +93,7 @@ EXTRA_DIST += $(srcdir)/po/Rules-doc m4/gnulib-cache.m4 .indent.pro
 
 #--------------------------------------------------------------------------
 
-nodist_EXTRA_DATA = NamesList.UTF-8 ListeDesNoms.UTF-8
+nodist_EXTRA_DATA += NamesList.UTF-8 ListeDesNoms.UTF-8
 DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
 
 nodist_pkglibexec_SCRIPTS += make-names-db make-blocks-db
