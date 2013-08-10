@@ -60,12 +60,6 @@ AC_ARG_ENABLE([make-libunicodenames-db],
                 [do not install make-libunicodenames-db])])
 test -z "${enable_make_libunicodenames_db}" && enable_make_libunicodenames_db=yes
 
-AC_ARG_ENABLE([nameslist-install],
-        [AS_HELP_STRING([--enable-nameslist-install],
-                [install NamesList.UTF-8 and ListeDesNoms.UTF-8
-                 for use in the testsuites of libunicodenames wrappers,
-                 such as libunicodenames++])])
-
 #--------------------------------------------------------------------------
 #
 # Checks for programs.
@@ -153,10 +147,8 @@ AC_CHECK_FUNCS([__argz_count __argz_next __argz_stringify floor getcwd localecon
 
 AC_SUBST([LT_OBJDIR],["${lt_cv_objdir}"])
 
-AM_CONDITIONAL([MAKE_LIBUNICODENAMES_DB_INSTALL],
+AM_CONDITIONAL([INSTALL_MAKE_LIBUNICODENAMES_DB],
                [test x"${enable_make_libunicodenames_db}" = xyes])
-AM_CONDITIONAL([NAMESLIST_INSTALL],
-               [test x"${enable_nameslist_install}" = xyes])
 
 StM_CHANGELOGGERIZE
 

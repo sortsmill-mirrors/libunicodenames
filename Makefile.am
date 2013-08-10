@@ -93,18 +93,14 @@ EXTRA_DIST += $(srcdir)/po/Rules-doc m4/gnulib-cache.m4 .indent.pro
 
 #--------------------------------------------------------------------------
 
-NAMESLISTS = NamesList.UTF-8 ListeDesNoms.UTF-8
+nodist_EXTRA_DATA = NamesList.UTF-8 ListeDesNoms.UTF-8
+DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
 
 nodist_pkglibexec_SCRIPTS += make-names-db make-blocks-db
-MOSTLYCLEANFILES += $(nodist_pkglibexec_SCRIPTS)
+MOSTLYCLEANFILES += make-names-db make-blocks-db
 
-if NAMESLIST_INSTALL
-nodist_pkgdata_DATA += $(NAMESLISTS)
-else !NAMESLIST_INSTALL
-nodist_EXTRA_DATA += $(NAMESLISTS)
-endif !NAMESLIST_INSTALL
 
-if MAKE_LIBUNICODENAMES_DB_INSTALL #--------------
+if INSTALL_MAKE_LIBUNICODENAMES_DB #--------------
 
 nodist_bin_SCRIPTS += make-libunicodenames-db
 MOSTLYCLEANFILES += make-libunicodenames-db
@@ -136,7 +132,7 @@ EXTRA_DIST += make-libunicodenames-db.h2m
 
 endif HAVE_HELP2MAN
 
-endif MAKE_LIBUNICODENAMES_DB_INSTALL #-----------
+endif INSTALL_MAKE_LIBUNICODENAMES_DB #-----------
 
 MAKE_NAMES_DB = LC_ALL=C $(GAWK) -f make-names-db
 MAKE_BLOCKS_DB = LC_ALL=C $(GAWK) -f make-blocks-db
@@ -147,8 +143,6 @@ NamesList.UTF-8:
 
 ListeDesNoms.UTF-8:
 	$(WGET) $(NAMESLIST_FR_URL) -O - | $(CRLF_TO_LF) > $@
-
-DISTCLEANFILES += NamesList.UTF-8 ListeDesNoms.UTF-8
 
 # A target for package maintainers.
 rebuild-db: rebuild-names-db rebuild-blocks-db
