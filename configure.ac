@@ -23,7 +23,7 @@
 
 AC_PREREQ([2.68])
 AC_INIT([LibUnicodeNames],
-        [1.2.0_beta1],
+        [1.2.0],
         [http://bitbucket.org/sortsmill/libunicodenames/issues],
         [libunicodenames],
         [http://bitbucket.org/sortsmill/libunicodenames])
